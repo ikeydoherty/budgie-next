@@ -13,7 +13,7 @@
 
 __attribute__((constructor)) static void lib_solus_init(void)
 {
-        fprintf(stderr, "Library not implemented\n");
+        fprintf(stderr, "WARNING: libsolus is WIP and subject to rapid change\n");
 }
 
 /*
