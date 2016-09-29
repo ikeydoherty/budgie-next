@@ -1,7 +1,7 @@
 Nothing to see here.. move along
 --------------------------------
 
-I swears it.
+I swear on my dead goldfishes grave* there's nothing to see here.
 
 
 License
@@ -20,3 +20,5 @@ Authors
 -------
 
 Copyright (C) 2015-2016 Ikey Doherty <ikey@solus-project.com>
+
+*I _might_ be a lying bastid.
