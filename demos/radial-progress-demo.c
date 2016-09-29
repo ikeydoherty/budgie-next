@@ -26,6 +26,7 @@ int main(int argc, char **argv)
         window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         g_signal_connect(window, "delete-event", gtk_main_quit, NULL);
         gtk_window_set_title(GTK_WINDOW(window), "Radial Progress Demo");
+        gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 
         /* Box */
         box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
