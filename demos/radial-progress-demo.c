@@ -20,21 +20,27 @@ SOLUS_END_INCLUDES
 int main(int argc, char **argv)
 {
         gtk_init(&argc, &argv);
-        GtkWidget *window, *box, *radial = NULL;
+        GtkWidget *window, *box, *radial, *progress = NULL;
 
         /* Set up the window */
         window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         g_signal_connect(window, "delete-event", gtk_main_quit, NULL);
         gtk_window_set_title(GTK_WINDOW(window), "Radial Progress Demo");
         gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
+        gtk_container_set_border_width(GTK_CONTAINER(window), 100);
 
         /* Box */
         box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
         gtk_container_add(GTK_CONTAINER(window), box);
 
-        /* Progress */
+        /* Radial rogress */
         radial = su_radial_progress_new();
         gtk_box_pack_start(GTK_BOX(box), radial, FALSE, FALSE, 0);
+
+        /* Legacy progress */
+        progress = gtk_progress_bar_new();
+        gtk_box_pack_start(GTK_BOX(box), progress, FALSE, FALSE, 1);
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.6);
 
         /* Show the widget tree */
         gtk_widget_show_all(window);
