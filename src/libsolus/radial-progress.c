@@ -19,7 +19,7 @@ struct _SuRadialProgressPrivate {
         int __reserved1;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(SuRadialProgress, su_radial_progress, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE(SuRadialProgress, su_radial_progress, GTK_TYPE_DRAWING_AREA)
 
 /**
  * su_radial_progress_new:

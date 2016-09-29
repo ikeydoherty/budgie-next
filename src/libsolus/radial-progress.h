@@ -30,11 +30,11 @@ typedef struct _SuRadialProgressClass SuRadialProgressClass;
         (G_TYPE_INSTANCE_GET_CLASS((o), SU_TYPE_RADIAL_PROGRESS, SuRadialProgressClass))
 
 struct _SuRadialProgressClass {
-        GtkWidgetClass parent_class;
+        GtkDrawingAreaClass parent_class;
 };
 
 struct _SuRadialProgress {
-        GtkWidget parent;
+        GtkDrawingArea parent;
         SuRadialProgressPrivate *priv;
 };
 
