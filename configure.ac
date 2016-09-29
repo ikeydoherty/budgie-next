@@ -32,10 +32,22 @@ AH_TOP([#ifndef CONFIG_H_INCLUDED
 AH_BOTTOM([#endif])
 AC_CONFIG_HEADERS([config.h])
 
+# Check if demos are requested
+have_demos="no"
+AC_ARG_ENABLE(demos, AS_HELP_STRING([--enable-demos], [enable demos]))
+if test "x$enable_demos" = "xyes" ; then
+        AC_DEFINE([HAVE_DEMOS], [1], [Enabled demos])
+        have_demos="yes"
+else
+        have_demos="no"
+fi
+AM_CONDITIONAL([HAVE_DEMOS], [test x$have_demos = "xyes"])
+
 
 AC_CONFIG_FILES([Makefile
                 src/Makefile
-                src/libsolus/Makefile])
+                src/libsolus/Makefile
+                demos/Makefile])
 
 AC_OUTPUT
 
@@ -53,4 +65,6 @@ AC_MSG_RESULT([
         compiler:               ${CC}
         cflags:                 ${CFLAGS}
         ldflags:                ${LDFLAGS}
+
+        demos:                  ${have_demos}
 ])

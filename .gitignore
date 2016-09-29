@@ -21,3 +21,6 @@ stamp-*
 *.la
 *.lo
 .libs
+
+# Demo binaries
+/demos/radial-progress-demo
