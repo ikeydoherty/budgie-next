@@ -119,8 +119,9 @@ static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
 {
         GtkAllocation alloc;
         gdouble radius;
-        gdouble line_width_outer = 2;
+        gdouble line_width_outer = 4;
         SuRadialProgress *self = NULL;
+        GdkRGBA fg, track = { 0 };
 
         self = SU_RADIAL_PROGRESS(widget);
 
@@ -129,19 +130,31 @@ static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
         /* Antialias or gtfo */
         cairo_set_antialias(cr, CAIRO_ANTIALIAS_SUBPIXEL);
 
-        /* Set up colours and such */
-        cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.8);
-        cairo_set_line_width(cr, line_width_outer);
-
         /* Move to center point */
         cairo_translate(cr, alloc.width / 2, alloc.height / 2);
 
         /* Keep it bound */
         radius = ((MIN(alloc.width, alloc.height)) / 2) - (line_width_outer * 2);
 
+        /* Temporary colours */
+        gdk_rgba_parse(&track, "#E5E5E5");
+        gdk_rgba_parse(&fg, "#2F9CE0");
+
+        /* Render the track, full circle */
+        cairo_save(cr);
+        cairo_set_source_rgba(cr, track.red, track.green, track.blue, track.alpha);
+        cairo_set_line_width(cr, line_width_outer);
+        cairo_arc(cr, 0, 0, radius, 0.0, 2.0 * M_PI);
+        cairo_stroke(cr);
+        cairo_restore(cr);
+
         /* Render the progress arc */
+        cairo_save(cr);
+        cairo_set_source_rgba(cr, fg.red, fg.green, fg.blue, fg.alpha);
+        cairo_set_line_width(cr, line_width_outer);
         cairo_arc(cr, 0, 0, radius, self->priv->start_angle, self->priv->end_angle);
-        cairo_stroke_preserve(cr);
+        cairo_stroke(cr);
+        cairo_restore(cr);
 
         return GDK_EVENT_STOP;
 }
