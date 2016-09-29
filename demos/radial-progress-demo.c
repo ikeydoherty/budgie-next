@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 
         /* Radial rogress */
         radial = su_radial_progress_new();
-        su_radial_progress_set_fraction(SU_RADIAL_PROGRESS(radial), 0.3);
+        su_radial_progress_set_fraction(SU_RADIAL_PROGRESS(radial), 0.6);
 
         frame = gtk_frame_new("<b>SuRadialProgress</b>");
         gtk_container_add(GTK_CONTAINER(frame), radial);
