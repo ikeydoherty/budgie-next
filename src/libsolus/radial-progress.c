@@ -9,11 +9,15 @@
  * version 2.1 of the License, or (at your option) any later version.
  */
 
+#define _GNU_SOURCE
+
 #include "util.h"
 
 SOLUS_BEGIN_INCLUDES
 #include "radial-progress.h"
 SOLUS_END_INCLUDES
+
+#include <math.h>
 
 enum { PROP_FRACTION = 1, N_PROPS };
 
@@ -81,16 +85,53 @@ static void su_radial_progress_dispose(__solus_unused__ GObject *obj)
 }
 
 /**
+ * Do the actual drawing
+ */
+static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
+{
+        GtkAllocation alloc;
+        gdouble radius;
+        gdouble line_width_outer = 2;
+
+        gtk_widget_get_allocation(widget, &alloc);
+
+        /* Antialias or gtfo */
+        cairo_set_antialias(cr, CAIRO_ANTIALIAS_SUBPIXEL);
+
+        /* Set up colours and such */
+        cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.8);
+        cairo_set_line_width(cr, line_width_outer);
+
+        /* Keep it bound */
+        radius = ((MIN(alloc.width, alloc.height)) / 2) - (line_width_outer * 2);
+        /* Move to center point */
+        cairo_translate(cr, alloc.width / 2, alloc.height / 2);
+
+        /* Temporary. We need to do based on fraction.. */
+        gdouble angle = M_PI * 2;
+
+        /* Render the progress arc */
+        cairo_arc(cr, 0, 0, radius, 0, angle);
+        cairo_stroke_preserve(cr);
+
+        return GDK_EVENT_STOP;
+}
+
+/**
  * Class initialisation
  */
 static void su_radial_progress_class_init(SuRadialProgressClass *klazz)
 {
         GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
+        GtkWidgetClass *wid_class = GTK_WIDGET_CLASS(klazz);
 
-        /* vtable hookup */
+        /* gobject vtable hookup */
         obj_class->dispose = su_radial_progress_dispose;
         obj_class->get_property = su_radial_progress_get_property;
         obj_class->set_property = su_radial_progress_set_property;
+
+        /* widget vtable hookup */
+        wid_class->draw = su_radial_progress_draw;
 
         /**
          * SuRadialProgress:fraction:
@@ -142,6 +183,9 @@ void su_radial_progress_set_fraction(SuRadialProgress *self, gdouble fraction)
 static void su_radial_progress_init(SuRadialProgress *self)
 {
         self->priv = su_radial_progress_get_instance_private(self);
+
+        /* TODO: Remove this fugly hack!! Only here until render code is done */
+        gtk_widget_set_size_request(GTK_WIDGET(self), 64, 64);
 }
 
 /*
