@@ -24,7 +24,6 @@ static inline void stylize_frame(GtkWidget *frame_widget)
 
         gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
         g_object_set(label, "margin-left", 3, "margin-right", 3, NULL);
-        g_object_set(gtk_bin_get_child(GTK_BIN(frame)), "margin", 10, NULL);
         g_object_set(frame, "margin", 10, NULL);
 }
 
@@ -59,6 +58,7 @@ int main(int argc, char **argv)
 
         /* Legacy progress */
         progress = gtk_progress_bar_new();
+        g_object_set(progress, "margin", 10, NULL);
         gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.6);
         frame = gtk_frame_new("<b>GtkProgressBar</b>");
         gtk_container_add(GTK_CONTAINER(frame), progress);
