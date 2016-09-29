@@ -21,8 +21,14 @@ SOLUS_END_INCLUDES
 
 enum { PROP_FRACTION = 1, N_PROPS };
 
+/**
+ * Precompute this, no sense in calculating it at runtime. 90 degree offset
+ */
+#define RADIAL_DEFAULT_OFFSET (-(2.0 * M_PI * 0.25))
+
 struct _SuRadialProgressPrivate {
         gdouble fraction;
+        gdouble radial_offset;
 };
 
 static GParamSpec *obj_properties[N_PROPS] = {
@@ -85,19 +91,11 @@ static void su_radial_progress_dispose(__solus_unused__ GObject *obj)
 }
 
 /**
- * Convert the given degrees into radians
- */
-static inline gdouble degrees_to_radians(gdouble degrees)
-{
-        return degrees * (M_PI / 180.0);
-}
-
-/**
  * Convert the given fractional "fraction" property into radians
  */
 static inline gdouble fraction_to_radians(gdouble fraction)
 {
-        return degrees_to_radians(360.0 * fraction);
+        return 2.0 * M_PI * fraction;
 }
 
 /**
@@ -132,9 +130,8 @@ static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
         gdouble end_angle = fraction_to_radians(self->priv->fraction);
 
         /* Shift everything back 90 deg */
-        gdouble angular_offset = degrees_to_radians(-90.0);
-        start_angle += angular_offset;
-        end_angle += angular_offset;
+        start_angle += self->priv->radial_offset;
+        end_angle += self->priv->radial_offset;
 
         /* Render the progress arc */
         cairo_arc(cr, 0, 0, radius, start_angle, end_angle);
@@ -209,6 +206,7 @@ void su_radial_progress_set_fraction(SuRadialProgress *self, gdouble fraction)
 static void su_radial_progress_init(SuRadialProgress *self)
 {
         self->priv = su_radial_progress_get_instance_private(self);
+        self->priv->radial_offset = RADIAL_DEFAULT_OFFSET;
 
         /* TODO: Remove this fugly hack!! Only here until render code is done */
         gtk_widget_set_size_request(GTK_WIDGET(self), 64, 64);
