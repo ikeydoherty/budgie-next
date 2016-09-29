@@ -39,6 +39,8 @@ struct _SuRadialProgress {
 };
 
 GtkWidget *su_radial_progress_new(void);
+gdouble su_radial_progress_get_fraction(SuRadialProgress *self);
+void su_radial_progress_set_fraction(SuRadialProgress *self, gdouble fraction);
 
 GType su_radial_progress_get_type(void);
 

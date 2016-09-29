@@ -15,11 +15,52 @@ SOLUS_BEGIN_INCLUDES
 #include "radial-progress.h"
 SOLUS_END_INCLUDES
 
+enum { PROP_FRACTION = 1, N_PROPS };
+
 struct _SuRadialProgressPrivate {
-        int __reserved1;
+        gdouble fraction;
+};
+
+static GParamSpec *obj_properties[N_PROPS] = {
+        NULL,
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(SuRadialProgress, su_radial_progress, GTK_TYPE_DRAWING_AREA)
+
+/**
+ * Set GObject properties
+ */
+static void su_radial_progress_set_property(GObject *object, guint id, const GValue *value,
+                                            GParamSpec *spec)
+{
+        SuRadialProgress *self = SU_RADIAL_PROGRESS(object);
+
+        switch (id) {
+        case PROP_FRACTION:
+                self->priv->fraction = g_value_get_double(value);
+                break;
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
+        }
+}
+
+/**
+ * Get GObject properties
+ */
+static void su_radial_progress_get_property(GObject *object, guint id, GValue *value,
+                                            GParamSpec *spec)
+{
+        SuRadialProgress *self = SU_RADIAL_PROGRESS(object);
+
+        switch (id) {
+        case PROP_FRACTION:
+                g_value_set_double(value, self->priv->fraction);
+        default:
+                G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
+                break;
+        }
+}
 
 /**
  * su_radial_progress_new:
@@ -46,7 +87,53 @@ static void su_radial_progress_class_init(SuRadialProgressClass *klazz)
 {
         GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
 
+        /* vtable hookup */
         obj_class->dispose = su_radial_progress_dispose;
+        obj_class->get_property = su_radial_progress_get_property;
+        obj_class->set_property = su_radial_progress_set_property;
+
+        /**
+         * SuRadialProgress:fraction:
+         *
+         * The completion factor of the progress display
+         */
+        obj_properties[PROP_FRACTION] =
+            g_param_spec_double("fraction",
+                                "Progress fraction",
+                                "The completion of this progress widget",
+                                0.0,
+                                1.0,
+                                0.0,
+                                G_PARAM_READWRITE);
+
+        g_object_class_install_properties(obj_class, N_PROPS, obj_properties);
+}
+
+/**
+ * Object methods
+ */
+
+/**
+ * su_radial_progress_get_fraction:
+ *
+ * Get the fraction used by this SuRadialProgress
+ */
+gdouble su_radial_progress_get_fraction(SuRadialProgress *self)
+{
+        g_return_val_if_fail(self != NULL, -1.0);
+        return self->priv->fraction;
+}
+
+/**
+ * su_radial_progress_set_fraction:
+ *
+ * Set the fraction for this SuRadialProgress
+ */
+void su_radial_progress_set_fraction(SuRadialProgress *self, gdouble fraction)
+{
+        g_return_if_fail(self != NULL);
+        gdouble nfraction = CLAMP(fraction, 0.0, 1.0);
+        self->priv->fraction = nfraction;
 }
 
 /**
