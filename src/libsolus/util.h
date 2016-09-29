@@ -59,6 +59,13 @@
 #define SOLUS_END_INCLUDES
 #endif
 
+/* Useful macros */
+
+/**
+ * Useful during development to silence compiler warnings
+ */
+#define __solus_unused__ __attribute__((unused))
+
 /*
  * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
  *

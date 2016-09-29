@@ -5,7 +5,9 @@ lib_LTLIBRARIES = \
 
 libsolus_la_SOURCES = \
 	main.c \
-	util.h
+	util.h \
+	radial-progress.h \
+	radial-progress.c
 
 libsolus_la_CFLAGS = \
 	$(GTK_CFLAGS) \
