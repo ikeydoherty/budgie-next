@@ -29,6 +29,8 @@ enum { PROP_FRACTION = 1, N_PROPS };
 struct _SuRadialProgressPrivate {
         gdouble fraction;
         gdouble radial_offset;
+        gdouble start_angle;
+        gdouble end_angle;
 };
 
 static GParamSpec *obj_properties[N_PROPS] = {
@@ -36,6 +38,25 @@ static GParamSpec *obj_properties[N_PROPS] = {
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(SuRadialProgress, su_radial_progress, GTK_TYPE_DRAWING_AREA)
+
+/**
+ * Convert the given fractional "fraction" property into radians
+ */
+static inline gdouble fraction_to_radians(gdouble fraction)
+{
+        return 2.0 * M_PI * fraction;
+}
+
+/**
+ * Precalculate angles so we don't do them on every draw
+ */
+static void su_radial_progress_update_internal(SuRadialProgress *self)
+{
+        self->priv->start_angle = self->priv->radial_offset;
+        self->priv->end_angle =
+            fraction_to_radians(self->priv->fraction) + self->priv->radial_offset;
+        gtk_widget_queue_draw(GTK_WIDGET(self));
+}
 
 /**
  * Set GObject properties
@@ -48,6 +69,7 @@ static void su_radial_progress_set_property(GObject *object, guint id, const GVa
         switch (id) {
         case PROP_FRACTION:
                 self->priv->fraction = g_value_get_double(value);
+                su_radial_progress_update_internal(self);
                 break;
         default:
                 G_OBJECT_WARN_INVALID_PROPERTY_ID(object, id, spec);
@@ -91,14 +113,6 @@ static void su_radial_progress_dispose(__solus_unused__ GObject *obj)
 }
 
 /**
- * Convert the given fractional "fraction" property into radians
- */
-static inline gdouble fraction_to_radians(gdouble fraction)
-{
-        return 2.0 * M_PI * fraction;
-}
-
-/**
  * Do the actual drawing
  */
 static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
@@ -125,16 +139,8 @@ static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
         /* Keep it bound */
         radius = ((MIN(alloc.width, alloc.height)) / 2) - (line_width_outer * 2);
 
-        /* fraction of circle in degrees to radians  */
-        gdouble start_angle = 0.0;
-        gdouble end_angle = fraction_to_radians(self->priv->fraction);
-
-        /* Shift everything back 90 deg */
-        start_angle += self->priv->radial_offset;
-        end_angle += self->priv->radial_offset;
-
         /* Render the progress arc */
-        cairo_arc(cr, 0, 0, radius, start_angle, end_angle);
+        cairo_arc(cr, 0, 0, radius, self->priv->start_angle, self->priv->end_angle);
         cairo_stroke_preserve(cr);
 
         return GDK_EVENT_STOP;
@@ -198,6 +204,7 @@ void su_radial_progress_set_fraction(SuRadialProgress *self, gdouble fraction)
         g_return_if_fail(self != NULL);
         gdouble nfraction = CLAMP(fraction, 0.0, 1.0);
         self->priv->fraction = nfraction;
+        su_radial_progress_update_internal(self);
 }
 
 /**
@@ -207,6 +214,9 @@ static void su_radial_progress_init(SuRadialProgress *self)
 {
         self->priv = su_radial_progress_get_instance_private(self);
         self->priv->radial_offset = RADIAL_DEFAULT_OFFSET;
+
+        /* Update internal state before rendering */
+        su_radial_progress_update_internal(self);
 
         /* TODO: Remove this fugly hack!! Only here until render code is done */
         gtk_widget_set_size_request(GTK_WIDGET(self), 64, 64);
