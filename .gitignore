@@ -1,0 +1,23 @@
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+compile
+config.*
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh
+missing
+*.deps
+*.o
+stamp-*
+
+# auto m4 cruft
+/m4/lt*.m4
+/m4/libtool*.m4
+
+*.la
+*.lo
+.libs
