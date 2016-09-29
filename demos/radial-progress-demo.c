@@ -31,6 +31,7 @@ int main(int argc, char **argv)
 {
         gtk_init(&argc, &argv);
         GtkWidget *window, *box, *radial, *frame, *progress = NULL;
+        GtkWidget *spinner = NULL;
         GtkSizeGroup *sgroup = NULL;
 
         sgroup = gtk_size_group_new(GTK_SIZE_GROUP_VERTICAL);
@@ -65,6 +66,18 @@ int main(int argc, char **argv)
         gtk_box_pack_start(GTK_BOX(box), frame, FALSE, FALSE, 0);
         stylize_frame(frame);
         gtk_size_group_add_widget(sgroup, frame);
+
+        /* Spinner to control fractions */
+        spinner = gtk_spin_button_new_with_range(0.0, 1.0, 0.1);
+        gtk_box_pack_end(GTK_BOX(box), spinner, FALSE, FALSE, 4);
+        g_object_set(spinner, "valign", GTK_ALIGN_CENTER, "halign", GTK_ALIGN_START, NULL);
+
+        /* And in the darkness, bind them */
+        g_object_bind_property(spinner, "value", progress, "fraction", G_BINDING_DEFAULT);
+        g_object_bind_property(spinner, "value", radial, "fraction", G_BINDING_DEFAULT);
+
+        /* Binding will now update both progress widgets */
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(spinner), 0.6);
 
         /* Show the widget tree */
         gtk_widget_show_all(window);
