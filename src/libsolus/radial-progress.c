@@ -85,6 +85,22 @@ static void su_radial_progress_dispose(__solus_unused__ GObject *obj)
 }
 
 /**
+ * Convert the given degrees into radians
+ */
+static inline gdouble degrees_to_radians(gdouble degrees)
+{
+        return degrees * (M_PI / 180.0);
+}
+
+/**
+ * Convert the given fractional "fraction" property into radians
+ */
+static inline gdouble fraction_to_radians(gdouble fraction)
+{
+        return degrees_to_radians(360.0 * fraction);
+}
+
+/**
  * Do the actual drawing
  */
 static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
@@ -92,6 +108,9 @@ static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
         GtkAllocation alloc;
         gdouble radius;
         gdouble line_width_outer = 2;
+        SuRadialProgress *self = NULL;
+
+        self = SU_RADIAL_PROGRESS(widget);
 
         gtk_widget_get_allocation(widget, &alloc);
 
@@ -102,16 +121,23 @@ static gboolean su_radial_progress_draw(GtkWidget *widget, cairo_t *cr)
         cairo_set_source_rgba(cr, 0.0, 0.0, 0.0, 0.8);
         cairo_set_line_width(cr, line_width_outer);
 
-        /* Keep it bound */
-        radius = ((MIN(alloc.width, alloc.height)) / 2) - (line_width_outer * 2);
         /* Move to center point */
         cairo_translate(cr, alloc.width / 2, alloc.height / 2);
 
-        /* Temporary. We need to do based on fraction.. */
-        gdouble angle = M_PI * 2;
+        /* Keep it bound */
+        radius = ((MIN(alloc.width, alloc.height)) / 2) - (line_width_outer * 2);
+
+        /* fraction of circle in degrees to radians  */
+        gdouble start_angle = 0.0;
+        gdouble end_angle = fraction_to_radians(self->priv->fraction);
+
+        /* Shift everything back 90 deg */
+        gdouble angular_offset = degrees_to_radians(-90.0);
+        start_angle += angular_offset;
+        end_angle += angular_offset;
 
         /* Render the progress arc */
-        cairo_arc(cr, 0, 0, radius, 0, angle);
+        cairo_arc(cr, 0, 0, radius, start_angle, end_angle);
         cairo_stroke_preserve(cr);
 
         return GDK_EVENT_STOP;
