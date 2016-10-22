@@ -58,6 +58,8 @@ static void budgie_panel_window_class_init(BudgiePanelWindowClass *klazz)
 static void budgie_panel_window_init(BudgiePanelWindow *self)
 {
         self->priv = budgie_panel_window_get_instance_private(self);
+
+        g_signal_connect(G_OBJECT(self), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
 }
 
 /*

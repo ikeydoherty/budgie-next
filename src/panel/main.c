@@ -14,9 +14,21 @@
 
 #include "util.h"
 
+SOLUS_BEGIN_PEDANTIC
+#include "panel-window.h"
+SOLUS_END_PEDANTIC
+
 int main(__solus_unused__ int argc, __solus_unused__ char **argv)
 {
-        fputs("Not yet implemented", stderr);
+        gtk_init(&argc, &argv);
+        GtkWidget *panel_window = NULL;
+
+        panel_window = budgie_panel_window_new();
+        gtk_widget_show_all(panel_window);
+        gtk_main();
+
+        gtk_widget_destroy(panel_window);
+
         return EXIT_FAILURE;
 }
 
