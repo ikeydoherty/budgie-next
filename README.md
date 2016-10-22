@@ -42,6 +42,4 @@ of each source file.
 Authors
 -------
 
-Copyright © 2015-2016 Ikey Doherty <ikey@solus-project.com>
-
-*I _might_ be a lying bastid.
+Copyright © 2016 Ikey Doherty <ikey@solus-project.com>
