@@ -29,7 +29,7 @@
 /**
  * End the includes block, i.e. by popping the diagnostic once more
  */
-#define _SOLUS_END_PEDANTICS(COMP) _Pragma(_STRINGIFY(COMP diagnostic pop))
+#define _SOLUS_END_PEDANTIC(COMP) _Pragma(_STRINGIFY(COMP diagnostic pop))
 
 /**
  * Clang unfortunately also defines __GNUC__ meaning a second level of tests
@@ -41,14 +41,14 @@
  * pragma GCC
  */
 #define SOLUS_BEGIN_PEDANTIC _SOLUS_BEGIN_PEDANTIC(clang)
-#define SOLUS_END_PEDANTICS _SOLUS_END_PEDANTICS(clang)
+#define SOLUS_END_PEDANTIC _SOLUS_END_PEDANTIC(clang)
 #else /* __clang__ */
 
 /**
  * Specifically use GCC pragma for GCC
  */
 #define SOLUS_BEGIN_PEDANTIC _SOLUS_BEGIN_PEDANTIC(GCC)
-#define SOLUS_END_PEDANTICS _SOLUS_END_PEDANTICS(GCC)
+#define SOLUS_END_PEDANTIC _SOLUS_END_PEDANTIC(GCC)
 #endif
 
 #else /* __GNUC__ */
@@ -56,7 +56,7 @@
  * Unknown compiler, don't expose the functionality
  */
 #define SOLUS_BEGIN_PEDANTIC
-#define SOLUS_END_PEDANTICS
+#define SOLUS_END_PEDANTIC
 #endif
 
 /* Useful macros */

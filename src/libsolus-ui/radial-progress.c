@@ -15,7 +15,7 @@
 
 SOLUS_BEGIN_PEDANTIC
 #include "radial-progress.h"
-SOLUS_END_PEDANTICS
+SOLUS_END_PEDANTIC
 
 #include <math.h>
 
