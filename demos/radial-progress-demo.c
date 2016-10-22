@@ -11,9 +11,9 @@
 
 #include "util.h"
 
-SOLUS_BEGIN_INCLUDES
+SOLUS_BEGIN_PEDANTIC
 #include "radial-progress.h"
-SOLUS_END_INCLUDES
+SOLUS_END_PEDANTICS
 
 #include <stdlib.h>
 
