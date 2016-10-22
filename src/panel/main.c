@@ -12,7 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char **argv)
+#include "util.h"
+
+int main(__solus_unused__ int argc, __solus_unused__ char **argv)
 {
         fputs("Not yet implemented", stderr);
         return EXIT_FAILURE;
