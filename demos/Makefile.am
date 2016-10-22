@@ -13,7 +13,8 @@ radial_progress_demo_CFLAGS = \
 	$(AM_CFLAGS)
 
 radial_progress_demo_LDADD = \
-	../src/libsolus/libsolus.la
+  ../src/libsolus-ui/libsolus-ui.la \
+  $(GTK_LIBS)
 
 
 # Demos
