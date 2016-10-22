@@ -1,2 +1,2 @@
 SUBDIRS = \
-	libsolus
+	libsolus-ui

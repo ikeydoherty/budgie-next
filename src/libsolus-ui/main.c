@@ -11,9 +11,9 @@
 
 #include <stdio.h>
 
-__attribute__((constructor)) static void lib_solus_init(void)
+__attribute__((constructor)) static void lib_solus_ui_init(void)
 {
-        fprintf(stderr, "WARNING: libsolus is WIP and subject to rapid change\n");
+        fprintf(stderr, "WARNING: libsolus-ui is WIP and subject to rapid change\n");
 }
 
 /*
