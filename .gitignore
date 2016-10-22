@@ -24,3 +24,6 @@ stamp-*
 
 # Demo binaries
 /demos/radial-progress-demo
+
+# Real binaries
+budgie-next-panel

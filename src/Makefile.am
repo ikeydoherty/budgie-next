@@ -1,2 +1,3 @@
 SUBDIRS = \
-	libsolus-ui
+	libsolus-ui \
+  panel
