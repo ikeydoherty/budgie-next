@@ -1,4 +1,4 @@
-AC_INIT([Anti Budgie], 1, [ikey@solus-project.com], [anti-budgie], [https://solus-project.com/])
+AC_INIT([Budgie Next], 1, [ikey@solus-project.com], [budgie-next], [https://solus-project.com/])
 AM_INIT_AUTOMAKE([-Wno-portability no-dist-gzip dist-xz foreign subdir-objects])
 AC_PROG_CC
 AC_PROG_CC_STDC
@@ -22,7 +22,7 @@ PKG_CHECK_MODULES([GTK],
                 ]
 )
 
-# We require support for a number of GCC attributes in anti-budgie
+# We require support for a number of GCC attributes in budgie-next
 AX_GCC_VAR_ATTRIBUTE(cleanup)
 AX_GCC_VAR_ATTRIBUTE(unused)
 
@@ -52,7 +52,7 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT
 
 AC_MSG_RESULT([
-        anti-budgie $VERSION
+        budgie-next $VERSION
         =====================
 
         prefix:                 ${prefix}

@@ -1,5 +1,5 @@
 /*
- * This file is part of anti-budgie
+ * This file is part of budgie-next
  *
  * Copyright © 2016 Ikey Doherty <ikey@solus-project.com>
  *
