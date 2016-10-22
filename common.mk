@@ -8,7 +8,8 @@ AM_CFLAGS = -fstack-protector -Wall -pedantic \
 
 AM_CPPFLAGS = \
 	-I $(top_srcdir)/src \
-	-I $(top_srcdir)/src/libsolus
+	-I $(top_srcdir)/src/libsolus \
+	-I $(top_srcdir)/src/libsolus-ui
 
 GTK_VERSIONING_FLAGS =						\
         -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_20              \
