@@ -46,6 +46,7 @@ AM_CONDITIONAL([HAVE_DEMOS], [test x$have_demos = "xyes"])
 
 AC_CONFIG_FILES([Makefile
                 src/Makefile
+                src/libsolus/Makefile
                 src/libsolus-ui/Makefile
                 src/panel/Makefile
                 demos/Makefile])

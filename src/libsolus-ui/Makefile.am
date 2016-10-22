@@ -4,8 +4,6 @@ lib_LTLIBRARIES = \
 	libsolus-ui.la
 
 libsolus_ui_la_SOURCES = \
-	main.c \
-	util.h \
 	radial-progress.h \
 	radial-progress.c
 
