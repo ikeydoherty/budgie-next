@@ -13,7 +13,9 @@ budgie_next_panel_SOURCES = \
 
 budgie_next_panel_CFLAGS = \
 	$(GTK_CFLAGS) \
+	$(BUDGIE_THEME_CFLAGS) \
 	$(AM_CFLAGS)
 
 budgie_next_panel_LDADD = \
-	$(GTK_LIBS)
+	$(GTK_LIBS) \
+	$(BUDGIE_THEME_LIBS)

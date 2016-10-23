@@ -11,6 +11,7 @@ AC_CONFIG_MACRO_DIR([m4])
 
 m4_define([glib_required_version], [2.48.0])
 m4_define([gtk_required_version], [3.20.0])
+m4_define([theme_required_version], [2])
 
 
 PKG_CHECK_MODULES([GTK],
@@ -19,6 +20,13 @@ PKG_CHECK_MODULES([GTK],
                  gio-2.0 >= glib_required_version,
                  gio-unix-2.0 >= glib_required_version,
                  gtk+-3.0 >= gtk_required_version
+                ]
+)
+
+# For now we'll just leach the existing Budgie Desktop theming
+PKG_CHECK_MODULES([BUDGIE_THEME],
+                [
+                 budgie-theme-1.0 >= theme_required_version
                 ]
 )
 
