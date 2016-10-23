@@ -81,14 +81,15 @@ static void budgie_panel_x11_window_set_struts(__solus_unused__ BudgiePanelWindo
                                                __solus_unused__ PanelPosition position)
 {
         GdkWindow *window = NULL;
-        GdkRectangle monitor_geom = { 0 };
+        GdkRectangle mg = { 0 };
         GdkScreen *screen = NULL;
         long *struts = NULL;
         gint monitor_number = monitor;
         gint monitor_count = 0;
         gint screen_height = 0;
-        /* FIXME */
-        gint panel_size = 40;
+        gint screen_height = 0;
+        /* FIXME: Panel size */
+        gint ps = 40;
 
         /* Ensure we have a window + realized state */
         window = gtk_widget_get_window(GTK_WIDGET(self));
@@ -112,66 +113,24 @@ static void budgie_panel_x11_window_set_struts(__solus_unused__ BudgiePanelWindo
         }
 
         screen_height = gdk_screen_get_height(screen);
-        gdk_screen_get_monitor_geometry(screen, monitor_number, &monitor_geom);
+        gdk_screen_get_mgetry(screen, monitor_number, &mg);
 
         /* Determine the appropriate struts for the given position */
         switch (position) {
         case PANEL_POSITION_TOP:
-                struts = (long[]){ 0,
-                                   0,
-                                   monitor_geom.y + panel_size,
-                                   0,
-                                   0,
-                                   0,
-                                   0,
-                                   0,
-                                   monitor_geom.x,
-                                   (monitor_geom.x + monitor_geom.width) - 1,
-                                   0,
-                                   0 };
+                struts =
+                    (long[]){ 0, 0, mg.y + ps, 0, 0, 0, 0, 0, mg.x, (mg.x + mg.width) - 1, 0, 0 };
                 break;
         case PANEL_POSITION_BOTTOM:
-                struts =
-                    (long[]){ 0,
-                              0,
-                              0,
-                              (screen_height - monitor_geom.height - monitor_geom.y) + panel_size,
-                              0,
-                              0,
-                              0,
-                              0,
-                              0,
-                              0,
-                              monitor_geom.x,
-                              (monitor_geom.x + monitor_geom.width) - 1 };
+                struts = (long[]){ 0, 0, 0,    (screen_height - mg.height - mg.y) + ps,
+                                   0, 0, 0,    0,
+                                   0, 0, mg.x, (mg.x + mg.width) - 1 };
                 break;
         case PANEL_POSITION_LEFT:
-                struts = (long[]){ panel_size,
-                                   0,
-                                   0,
-                                   0,
-                                   monitor_geom.y,
-                                   monitor_geom.y + monitor_geom.height,
-                                   0,
-                                   0,
-                                   0,
-                                   0,
-                                   0,
-                                   0 };
+                struts = (long[]){ ps, 0, 0, 0, mg.y, mg.y + mg.height, 0, 0, 0, 0, 0, 0 };
                 break;
         case PANEL_POSITION_RIGHT:
-                struts = (long[]){ 0,
-                                   panel_size,
-                                   0,
-                                   0,
-                                   0,
-                                   0,
-                                   monitor_geom.y,
-                                   monitor_geom.y + monitor_geom.height,
-                                   0,
-                                   0,
-                                   0,
-                                   0 };
+                struts = (long[]){ 0, ps, 0, 0, 0, 0, mg.y, mg.y + mg.height, 0, 0, 0, 0 };
                 break;
         default:
                 g_assert_not_reached();
