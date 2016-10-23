@@ -15,10 +15,12 @@
 
 SOLUS_BEGIN_PEDANTIC
 #include "panel-window.h"
+#include "theme-manager.h"
 SOLUS_END_PEDANTIC
 
 struct _BudgiePanelWindowPrivate {
         gint size_extent;
+        BudgieThemeManager *theme_manager;
 };
 
 /*

@@ -34,6 +34,13 @@ GtkWidget *budgie_panel_window_new()
  */
 static void budgie_panel_window_dispose(GObject *obj)
 {
+        BudgiePanelWindow *self = BUDGIE_PANEL_WINDOW(obj);
+
+        if (self->priv->theme_manager) {
+                g_object_unref(self->priv->theme_manager);
+                self->priv->theme_manager = NULL;
+        }
+
         G_OBJECT_CLASS(budgie_panel_window_parent_class)->dispose(obj);
 }
 
@@ -63,6 +70,9 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_type_hint(GTK_WINDOW(self), GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+
+        /* Eventually this will belong to a BudgiePanelManager */
+        self->priv->theme_manager = budgie_theme_manager_new();
 }
 
 void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, PanelPosition position)

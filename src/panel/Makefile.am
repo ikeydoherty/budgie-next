@@ -8,6 +8,8 @@ budgie_next_panel_SOURCES = \
 	panel-window.h \
 	panel-window.c \
 	panel-window-private.h \
+	theme-manager.h \
+	theme-manager.c \
 	x11/panel-window-x11.h \
 	x11/panel-window-x11.c
 
