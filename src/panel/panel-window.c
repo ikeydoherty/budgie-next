@@ -19,6 +19,8 @@ SOLUS_END_PEDANTIC
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePanelWindow, budgie_panel_window, GTK_TYPE_WINDOW)
 
+static void budgie_panel_window_constructed(GObject *obj);
+
 /**
  * budgie_panel_window_new:
  *
@@ -53,6 +55,7 @@ static void budgie_panel_window_class_init(BudgiePanelWindowClass *klazz)
 
         /* gobject vtable hookup */
         obj_class->dispose = budgie_panel_window_dispose;
+        obj_class->constructed = budgie_panel_window_constructed;
 }
 
 /**
@@ -158,6 +161,16 @@ void budgie_panel_window_set_struts(BudgiePanelWindow *self, gint monitor, Panel
                 return;
         }
         klazz->set_struts(self, monitor, position);
+}
+
+static void budgie_panel_window_constructed(GObject *object)
+{
+        BudgiePanelWindow *self = BUDGIE_PANEL_WINDOW(object);
+
+        /* Again, testing. */
+        budgie_panel_window_set_position(self, -1, PANEL_POSITION_BOTTOM);
+
+        G_OBJECT_CLASS(budgie_panel_window_parent_class)->constructed(object);
 }
 
 /*
