@@ -22,6 +22,10 @@ G_DEFINE_TYPE(BudgiePanelX11Window, budgie_panel_x11_window, BUDGIE_TYPE_PANEL_W
 static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint primary_monitor,
                                                PanelPosition position);
 
+/** Atoms used specifically on X11 */
+static GdkAtom atom_wm_partial;
+static GdkAtom atom_cardinal;
+
 /**
  * budgie_panel_x11_window_new:
  *
@@ -56,17 +60,131 @@ static void budgie_panel_x11_window_class_init(BudgiePanelX11WindowClass *klazz)
 }
 
 /**
+ * Initialise atoms once and once only
+ */
+static void budgie_panel_x11_window_init_xatoms(void)
+{
+        atom_wm_partial = gdk_atom_intern("_NET_WM_STRUT_PARTIAL", FALSE);
+        atom_cardinal = gdk_atom_intern("CARDINAL", FALSE);
+}
+
+/**
  * Instaniation
  */
 static void budgie_panel_x11_window_init(__solus_unused__ BudgiePanelX11Window *self)
 {
+        budgie_panel_x11_window_init_xatoms();
 }
 
 static void budgie_panel_x11_window_set_struts(__solus_unused__ BudgiePanelWindow *self,
-                                               __solus_unused__ gint primary_monitor,
+                                               __solus_unused__ gint monitor,
                                                __solus_unused__ PanelPosition position)
 {
-        g_message("BudgiePanelX11Window: Not yet implemented");
+        GdkWindow *window = NULL;
+        GdkRectangle monitor_geom = { 0 };
+        GdkScreen *screen = NULL;
+        long *struts = NULL;
+        gint monitor_number = monitor;
+        gint monitor_count = 0;
+        gint screen_height = 0;
+        /* FIXME */
+        gint panel_size = 40;
+
+        /* Ensure we have a window + realized state */
+        window = gtk_widget_get_window(GTK_WIDGET(self));
+        if (!window) {
+                return;
+        }
+        if (!gtk_widget_get_realized(GTK_WIDGET(self))) {
+                return;
+        }
+
+        screen = gtk_widget_get_screen(GTK_WIDGET(self));
+        monitor_count = gdk_screen_get_n_monitors(screen);
+        /* <1 = primary monitor */
+        if (monitor_number < 0) {
+                monitor_number = gdk_screen_get_primary_monitor(screen);
+        }
+
+        /* Useful during development */
+        if (monitor_number > monitor_count) {
+                g_warning("monitor_number > monitor_count: %d %d\n", monitor_number, monitor_count);
+        }
+
+        screen_height = gdk_screen_get_height(screen);
+        gdk_screen_get_monitor_geometry(screen, monitor_number, &monitor_geom);
+
+        /* Determine the appropriate struts for the given position */
+        switch (position) {
+        case PANEL_POSITION_TOP:
+                struts = (long[]){ 0,
+                                   0,
+                                   monitor_geom.y + panel_size,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   monitor_geom.x,
+                                   (monitor_geom.x + monitor_geom.width) - 1,
+                                   0,
+                                   0 };
+                break;
+        case PANEL_POSITION_BOTTOM:
+                struts =
+                    (long[]){ 0,
+                              0,
+                              0,
+                              (screen_height - monitor_geom.height - monitor_geom.y) + panel_size,
+                              0,
+                              0,
+                              0,
+                              0,
+                              0,
+                              0,
+                              monitor_geom.x,
+                              (monitor_geom.x + monitor_geom.width) - 1 };
+                break;
+        case PANEL_POSITION_LEFT:
+                struts = (long[]){ panel_size,
+                                   0,
+                                   0,
+                                   0,
+                                   monitor_geom.y,
+                                   monitor_geom.y + monitor_geom.height,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   0 };
+                break;
+        case PANEL_POSITION_RIGHT:
+                struts = (long[]){ 0,
+                                   panel_size,
+                                   0,
+                                   0,
+                                   0,
+                                   0,
+                                   monitor_geom.y,
+                                   monitor_geom.y + monitor_geom.height,
+                                   0,
+                                   0,
+                                   0,
+                                   0 };
+                break;
+        default:
+                g_assert_not_reached();
+        }
+
+        /* Fire off the property change */
+        gdk_property_change(window,
+                            atom_wm_partial,
+                            atom_cardinal,
+                            32,
+                            GDK_PROP_MODE_REPLACE,
+                            (guchar *)struts,
+                            12);
 }
 
 /*

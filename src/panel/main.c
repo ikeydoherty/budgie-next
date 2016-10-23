@@ -38,11 +38,11 @@ int main(__solus_unused__ int argc, __solus_unused__ char **argv)
         budgie_panel_window_set_position(BUDGIE_PANEL_WINDOW(panel_window),
                                          -1,
                                          PANEL_POSITION_BOTTOM);
+
+        gtk_widget_show_all(panel_window);
         budgie_panel_window_set_struts(BUDGIE_PANEL_WINDOW(panel_window),
                                        -1,
                                        PANEL_POSITION_BOTTOM);
-
-        gtk_widget_show_all(panel_window);
         gtk_main();
 
         gtk_widget_destroy(panel_window);
