@@ -43,14 +43,14 @@ typedef enum {
 
 struct _BudgiePanelWindowClass {
         GtkWindowClass parent_class;
+
+        /** Set window struts using display protocol specific method */
+        void (*set_struts)(BudgiePanelWindow *, gint, PanelPosition);
 };
 
 struct _BudgiePanelWindow {
         GtkWindow parent;
         BudgiePanelWindowPrivate *priv;
-
-        /** Currently runtime stuff, in future will be a BudgiePanelX11Window */
-        void (*set_struts)(BudgiePanelWindow *, gint, PanelPosition);
 };
 
 GtkWidget *budgie_panel_window_new(void);

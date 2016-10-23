@@ -132,11 +132,14 @@ void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, Pan
 
 void budgie_panel_window_set_struts(BudgiePanelWindow *self, gint monitor, PanelPosition position)
 {
-        if (!self->set_struts) {
+        BudgiePanelWindowClass *klazz = NULL;
+
+        klazz = BUDGIE_PANEL_WINDOW_GET_CLASS(self);
+        if (!klazz->set_struts) {
                 g_warning("No set_struts implementation available on this display");
                 return;
         }
-        self->set_struts(self, monitor, position);
+        klazz->set_struts(self, monitor, position);
 }
 
 /*
