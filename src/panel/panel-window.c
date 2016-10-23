@@ -36,9 +36,9 @@ GtkWidget *budgie_panel_window_new()
 /**
  * Handle cleanup
  */
-static void budgie_panel_window_dispose(__solus_unused__ GObject *obj)
+static void budgie_panel_window_dispose(GObject *obj)
 {
-        /* skip for now */
+        G_OBJECT_CLASS(budgie_panel_window_parent_class)->dispose(obj);
 }
 
 /**
