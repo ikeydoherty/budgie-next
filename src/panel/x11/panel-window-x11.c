@@ -76,9 +76,8 @@ static void budgie_panel_x11_window_init(__solus_unused__ BudgiePanelX11Window *
         budgie_panel_x11_window_init_xatoms();
 }
 
-static void budgie_panel_x11_window_set_struts(__solus_unused__ BudgiePanelWindow *self,
-                                               __solus_unused__ gint monitor,
-                                               __solus_unused__ PanelPosition position)
+static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint monitor,
+                                               PanelPosition position)
 {
         GdkWindow *window = NULL;
         GdkRectangle mg = { 0 };
