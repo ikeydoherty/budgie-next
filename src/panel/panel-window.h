@@ -38,9 +38,31 @@ struct _BudgiePanelWindow {
         BudgiePanelWindowPrivate *priv;
 };
 
+/**
+ * The position to set the panel to
+ */
+typedef enum {
+        PANEL_POSITION_MIN = 1 << 0,
+        PANEL_POSITION_TOP = 1 << 1,
+        PANEL_POSITION_BOTTOM = 1 << 2,
+        PANEL_POSITION_LEFT = 1 << 3,
+        PANEL_POSITION_RIGHT = 1 << 4,
+        PANEL_POSITION_MAX = 1 << 5
+} PanelPosition;
+
 GtkWidget *budgie_panel_window_new(void);
 
 GType budgie_panel_window_get_type(void);
+
+/**
+ * Set the position of the panel to be that of @position on the given @monitor
+ *
+ * @note This is currently X11 specific.
+ *
+ * @position: The number of the monitor to place the panel. -1 means primary monitor.
+ */
+void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor,
+                                      PanelPosition position);
 
 G_END_DECLS
 
