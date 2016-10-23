@@ -86,7 +86,6 @@ static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint mon
         gint monitor_number = monitor;
         gint monitor_count = 0;
         gint screen_height = 0;
-        gint screen_height = 0;
         /* FIXME: Panel size */
         gint ps = 40;
 
@@ -112,7 +111,7 @@ static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint mon
         }
 
         screen_height = gdk_screen_get_height(screen);
-        gdk_screen_get_mgetry(screen, monitor_number, &mg);
+        gdk_screen_get_monitor_geometry(screen, monitor_number, &mg);
 
         /* Determine the appropriate struts for the given position */
         switch (position) {
