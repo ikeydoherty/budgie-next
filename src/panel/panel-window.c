@@ -70,8 +70,6 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
 
         /* Again, testing. */
         budgie_panel_window_set_position(self, -1, PANEL_POSITION_BOTTOM);
-
-        g_signal_connect(G_OBJECT(self), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
 }
 
 void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, PanelPosition position)
