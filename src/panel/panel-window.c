@@ -14,12 +14,8 @@
 #include "util.h"
 
 SOLUS_BEGIN_PEDANTIC
-#include "panel-window.h"
+#include "panel-window-private.h"
 SOLUS_END_PEDANTIC
-
-struct _BudgiePanelWindowPrivate {
-        gint size_extent;
-};
 
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePanelWindow, budgie_panel_window, GTK_TYPE_WINDOW)
 

@@ -14,6 +14,7 @@
 #include "util.h"
 
 SOLUS_BEGIN_PEDANTIC
+#include "panel-window-private.h"
 #include "panel-window-x11.h"
 SOLUS_END_PEDANTIC
 
@@ -86,8 +87,7 @@ static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint mon
         gint monitor_number = monitor;
         gint monitor_count = 0;
         gint screen_height = 0;
-        /* FIXME: Panel size */
-        gint ps = 40;
+        gint ps = self->priv->size_extent;
 
         /* Ensure we have a window + realized state */
         window = gtk_widget_get_window(GTK_WIDGET(self));
