@@ -16,7 +16,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _BudgiePanelX11WindowPrivate BudgiePanelX11WindowPrivate;
 typedef struct _BudgiePanelX11Window BudgiePanelX11Window;
 typedef struct _BudgiePanelX11WindowClass BudgiePanelX11WindowClass;
 
@@ -38,7 +37,6 @@ struct _BudgiePanelX11WindowClass {
 
 struct _BudgiePanelX11Window {
         BudgiePanelWindow parent;
-        BudgiePanelX11WindowPrivate *priv;
 };
 
 GtkWidget *budgie_panel_x11_window_new(void);

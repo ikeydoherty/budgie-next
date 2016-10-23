@@ -67,10 +67,6 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_type_hint(GTK_WINDOW(self), GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
-
-        /* Again, testing. */
-        budgie_panel_window_set_position(self, -1, PANEL_POSITION_BOTTOM);
-        budgie_panel_window_set_struts(self, -1, PANEL_POSITION_BOTTOM);
 }
 
 void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, PanelPosition position)

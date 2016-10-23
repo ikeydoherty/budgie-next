@@ -17,11 +17,10 @@ SOLUS_BEGIN_PEDANTIC
 #include "panel-window-x11.h"
 SOLUS_END_PEDANTIC
 
-struct _BudgiePanelX11WindowPrivate {
-        int __reserved1;
-};
+G_DEFINE_TYPE(BudgiePanelX11Window, budgie_panel_x11_window, BUDGIE_TYPE_PANEL_WINDOW)
 
-G_DEFINE_TYPE_WITH_PRIVATE(BudgiePanelX11Window, budgie_panel_x11_window, BUDGIE_TYPE_PANEL_WINDOW)
+static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint primary_monitor,
+                                               PanelPosition position);
 
 /**
  * budgie_panel_x11_window_new:
@@ -47,17 +46,27 @@ static void budgie_panel_x11_window_dispose(GObject *obj)
 static void budgie_panel_x11_window_class_init(BudgiePanelX11WindowClass *klazz)
 {
         GObjectClass *obj_class = G_OBJECT_CLASS(klazz);
+        BudgiePanelWindowClass *panel_class = BUDGIE_PANEL_WINDOW_CLASS(klazz);
 
         /* gobject vtable hookup */
         obj_class->dispose = budgie_panel_x11_window_dispose;
+
+        /* panel vtable hookup */
+        panel_class->set_struts = budgie_panel_x11_window_set_struts;
 }
 
 /**
  * Instaniation
  */
-static void budgie_panel_x11_window_init(BudgiePanelX11Window *self)
+static void budgie_panel_x11_window_init(__solus_unused__ BudgiePanelX11Window *self)
 {
-        self->priv = budgie_panel_x11_window_get_instance_private(self);
+}
+
+static void budgie_panel_x11_window_set_struts(__solus_unused__ BudgiePanelWindow *self,
+                                               __solus_unused__ gint primary_monitor,
+                                               __solus_unused__ PanelPosition position)
+{
+        g_message("BudgiePanelX11Window: Not yet implemented");
 }
 
 /*
