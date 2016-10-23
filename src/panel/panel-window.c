@@ -61,15 +61,20 @@ static void budgie_panel_window_class_init(BudgiePanelWindowClass *klazz)
 static void budgie_panel_window_init(BudgiePanelWindow *self)
 {
         self->priv = budgie_panel_window_get_instance_private(self);
+        GtkStyleContext *style_context = NULL;
 
         /* Initialise private variables */
         self->priv->size_extent = 40;
 
-        /* Hacky for testing. */
+        /* EMWH requirements */
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_type_hint(GTK_WINDOW(self), GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+
+        /* Hacky for testing. */
+        style_context = gtk_widget_get_style_context(GTK_WIDGET(self));
+        gtk_style_context_add_class(style_context, "budgie-panel");
 
         /* Eventually this will belong to a BudgiePanelManager */
         self->priv->theme_manager = budgie_theme_manager_new();
