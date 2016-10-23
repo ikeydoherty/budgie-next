@@ -20,6 +20,7 @@ SOLUS_END_PEDANTIC
 G_DEFINE_TYPE_WITH_PRIVATE(BudgiePanelWindow, budgie_panel_window, GTK_TYPE_WINDOW)
 
 static void budgie_panel_window_constructed(GObject *obj);
+static gboolean budgie_panel_window_realized(BudgiePanelWindow *self, gpointer userdata);
 
 /**
  * budgie_panel_window_new:
@@ -85,6 +86,9 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
         } else {
                 g_warning("Compositing is not enabled, expect strange results.");
         }
+
+        /* When realized we need to set struts accordingly. */
+        g_signal_connect(self, "realize", G_CALLBACK(budgie_panel_window_realized), NULL);
 
         /* Hacky for testing. */
         style_context = gtk_widget_get_style_context(GTK_WIDGET(self));
@@ -171,6 +175,16 @@ static void budgie_panel_window_constructed(GObject *object)
         budgie_panel_window_set_position(self, -1, PANEL_POSITION_BOTTOM);
 
         G_OBJECT_CLASS(budgie_panel_window_parent_class)->constructed(object);
+}
+
+/**
+ * Toplevel panel now has an actual window, so reserve the struts
+ */
+static gboolean budgie_panel_window_realized(BudgiePanelWindow *self,
+                                             __solus_unused__ gpointer userdata)
+{
+        budgie_panel_window_set_struts(self, -1, PANEL_POSITION_BOTTOM);
+        return GDK_EVENT_PROPAGATE;
 }
 
 /*
