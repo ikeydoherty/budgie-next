@@ -26,7 +26,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(BudgiePanelWindow, budgie_panel_window, GTK_TYPE_WIND
  */
 GtkWidget *budgie_panel_window_new()
 {
-        return g_object_new(BUDGIE_TYPE_PANEL_WINDOW, "type", GTK_WINDOW_TOPLEVEL, NULL);
+        return g_object_new(BUDGIE_TYPE_PANEL_WINDOW, NULL);
 }
 
 /**
