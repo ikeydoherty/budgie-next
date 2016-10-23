@@ -30,7 +30,8 @@ struct _BudgieThemeManager {
 
 static void budgie_theme_manager_set_theme_css(BudgieThemeManager *self,
                                                const gchar *theme_portion);
-
+static void budgie_theme_manager_theme_changed(BudgieThemeManager *self, GParamSpec *prop,
+                                               GtkSettings *settings);
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
 
 /**
@@ -67,8 +68,16 @@ static void budgie_theme_manager_class_init(BudgieThemeManagerClass *klazz)
  */
 static void budgie_theme_manager_init(BudgieThemeManager *self)
 {
-        /* For now just set the default theme */
-        budgie_theme_manager_set_theme_css(self, "theme.css");
+        GtkSettings *settings = NULL;
+
+        settings = gtk_settings_get_default();
+        g_signal_connect_swapped(settings,
+                                 "notify::gtk-theme-name",
+                                 G_CALLBACK(budgie_theme_manager_theme_changed),
+                                 self);
+
+        /* Trigger theme changed */
+        budgie_theme_manager_theme_changed(self, NULL, settings);
 }
 
 /**
@@ -131,6 +140,25 @@ remove_provider:
                                                   GTK_STYLE_PROVIDER(css_provider),
                                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
         self->css_provider = css_provider;
+}
+
+static void budgie_theme_manager_theme_changed(BudgieThemeManager *self,
+                                               __solus_unused__ GParamSpec *prop,
+                                               GtkSettings *settings)
+{
+        gchar *theme_name = NULL;
+        const gchar *theme_css = NULL;
+
+        /* TODO: Set theme_css NULL if internal theming is disabled */
+        g_object_get(settings, "gtk-theme-name", &theme_name, NULL);
+        if (theme_name && g_str_equal(theme_name, "HighContrast")) {
+                theme_css = "theme_hc.css";
+        } else {
+                theme_css = "theme.css";
+        }
+        g_free(theme_name);
+
+        budgie_theme_manager_set_theme_css(self, theme_css);
 }
 
 /*
