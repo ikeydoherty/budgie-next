@@ -15,6 +15,8 @@
 
 SOLUS_BEGIN_PEDANTIC
 #include "theme-manager.h"
+#include <budgie-desktop/theme.h>
+#include <gtk/gtk.h>
 SOLUS_END_PEDANTIC
 
 struct _BudgieThemeManagerClass {
@@ -23,7 +25,11 @@ struct _BudgieThemeManagerClass {
 
 struct _BudgieThemeManager {
         GObject parent;
+        GtkCssProvider *css_provider;
 };
+
+static void budgie_theme_manager_set_theme_css(BudgieThemeManager *self,
+                                               const gchar *theme_portion);
 
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
 
@@ -59,9 +65,72 @@ static void budgie_theme_manager_class_init(BudgieThemeManagerClass *klazz)
 /**
  * Instaniation
  */
-static void budgie_theme_manager_init(__solus_unused__ BudgieThemeManager *self)
+static void budgie_theme_manager_init(BudgieThemeManager *self)
 {
-        /* Currently, do nothing.. */
+        /* For now just set the default theme */
+        budgie_theme_manager_set_theme_css(self, "theme.css");
+}
+
+/**
+ * Set the current process-wide styling to the selected theme portion, i.e.
+ * "theme.css" or "theme_hc.css".
+ *
+ * @note passing NULL to theme_portion will remove any theme providers allowing
+ * user themes to completely override the styling.
+ */
+static void budgie_theme_manager_set_theme_css(BudgieThemeManager *self, const gchar *theme_portion)
+{
+        GdkScreen *screen = NULL;
+        GtkCssProvider *css_provider = NULL;
+        gchar *theme_uri = NULL;
+        GError *error = NULL;
+        GFile *file = NULL;
+
+        screen = gdk_screen_get_default();
+
+        /* NULL portion, just remove the CSS provider */
+        if (!theme_portion) {
+                goto remove_provider;
+        }
+
+        /* Setting an invalid theme */
+        theme_uri = budgie_form_theme_path(theme_portion);
+        if (!theme_uri) {
+                g_warning("Requested invalid theme: %s", theme_portion);
+                return;
+        }
+
+        /* Attempt to load theme for the given URI */
+        file = g_file_new_for_uri(theme_uri);
+        g_free(theme_uri);
+        css_provider = gtk_css_provider_new();
+        if (!gtk_css_provider_load_from_file(css_provider, file, &error)) {
+                g_warning("Cannot load theme %s: %s\n", theme_uri, error->message);
+                g_error_free(error);
+                g_object_unref(css_provider);
+                g_object_unref(file);
+                return;
+        }
+        g_object_unref(file);
+
+remove_provider:
+        if (self->css_provider) {
+                gtk_style_context_remove_provider_for_screen(screen,
+                                                             GTK_STYLE_PROVIDER(
+                                                                 self->css_provider));
+                g_object_unref(self->css_provider);
+                self->css_provider = NULL;
+        }
+
+        /* No new theme has been set, just bail */
+        if (!css_provider) {
+                return;
+        }
+        /* Set the style globally */
+        gtk_style_context_add_provider_for_screen(screen,
+                                                  GTK_STYLE_PROVIDER(css_provider),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        self->css_provider = css_provider;
 }
 
 /*
