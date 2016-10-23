@@ -16,14 +16,24 @@
 
 SOLUS_BEGIN_PEDANTIC
 #include "panel-window.h"
+#include "x11/panel-window-x11.h"
+#include <gdk/gdkx.h>
 SOLUS_END_PEDANTIC
 
 int main(__solus_unused__ int argc, __solus_unused__ char **argv)
 {
         gtk_init(&argc, &argv);
         GtkWidget *panel_window = NULL;
+        GdkDisplay *display = NULL;
 
-        panel_window = budgie_panel_window_new();
+        display = gdk_display_get_default();
+        if (GDK_IS_X11_DISPLAY(display)) {
+                panel_window = budgie_panel_x11_window_new();
+        } else {
+                g_warning("Running fallback panel on unknown protocol");
+                panel_window = budgie_panel_window_new();
+        }
+
         gtk_widget_show_all(panel_window);
         gtk_main();
 
