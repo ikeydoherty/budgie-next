@@ -28,14 +28,6 @@ typedef struct _BudgieThemeManagerClass BudgieThemeManagerClass;
 #define BUDGIE_THEME_MANAGER_GET_CLASS(o)                                                          \
         (G_TYPE_INSTANCE_GET_CLASS((o), BUDGIE_TYPE_THEME_MANAGER, BudgieThemeManagerClass))
 
-struct _BudgieThemeManagerClass {
-        GObjectClass parent_class;
-};
-
-struct _BudgieThemeManager {
-        GObject parent;
-};
-
 BudgieThemeManager *budgie_theme_manager_new(void);
 
 GType budgie_theme_manager_get_type(void);

@@ -17,6 +17,14 @@ SOLUS_BEGIN_PEDANTIC
 #include "theme-manager.h"
 SOLUS_END_PEDANTIC
 
+struct _BudgieThemeManagerClass {
+        GObjectClass parent_class;
+};
+
+struct _BudgieThemeManager {
+        GObject parent;
+};
+
 G_DEFINE_TYPE(BudgieThemeManager, budgie_theme_manager, G_TYPE_OBJECT)
 
 /**
