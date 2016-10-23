@@ -60,7 +60,6 @@ static void budgie_panel_x11_window_init(BudgiePanelX11Window *self)
         self->priv = budgie_panel_x11_window_get_instance_private(self);
 }
 
-
 /*
  * Editor modelines  -  https://www.wireshark.org/tools/modelines.html
  *
