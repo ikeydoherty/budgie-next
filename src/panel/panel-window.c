@@ -59,6 +59,12 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
 {
         self->priv = budgie_panel_window_get_instance_private(self);
 
+        /* Hacky for testing. */
+        gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
+        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
+        gtk_window_set_type_hint(GTK_WINDOW(self), GDK_WINDOW_TYPE_HINT_DOCK);
+        gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+
         g_signal_connect(G_OBJECT(self), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
 }
 
