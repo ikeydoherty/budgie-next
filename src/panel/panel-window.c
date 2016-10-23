@@ -62,6 +62,8 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
 {
         self->priv = budgie_panel_window_get_instance_private(self);
         GtkStyleContext *style_context = NULL;
+        GdkScreen *screen = NULL;
+        GdkVisual *visual = NULL;
 
         /* Initialise private variables */
         self->priv->size_extent = 40;
@@ -71,6 +73,15 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_type_hint(GTK_WINDOW(self), GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+
+        /* Set an RGBA visual */
+        screen = gtk_widget_get_screen(GTK_WIDGET(self));
+        visual = gdk_screen_get_rgba_visual(screen);
+        if (visual) {
+                gtk_widget_set_visual(GTK_WIDGET(self), visual);
+        } else {
+                g_warning("Compositing is not enabled, expect strange results.");
+        }
 
         /* Hacky for testing. */
         style_context = gtk_widget_get_style_context(GTK_WIDGET(self));
