@@ -70,6 +70,7 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
 
         /* Again, testing. */
         budgie_panel_window_set_position(self, -1, PANEL_POSITION_BOTTOM);
+        budgie_panel_window_set_struts(self, -1, PANEL_POSITION_BOTTOM);
 }
 
 void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, PanelPosition position)
@@ -127,6 +128,15 @@ void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, Pan
 
         gtk_widget_set_size_request(GTK_WIDGET(self), panel_w, panel_h);
         gtk_window_move(GTK_WINDOW(self), panel_x, panel_y);
+}
+
+void budgie_panel_window_set_struts(BudgiePanelWindow *self, gint monitor, PanelPosition position)
+{
+        if (!self->set_struts) {
+                g_warning("No set_struts implementation available on this display");
+                return;
+        }
+        self->set_struts(self, monitor, position);
 }
 
 /*
