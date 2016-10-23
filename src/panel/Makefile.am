@@ -6,7 +6,9 @@ bin_PROGRAMS = \
 budgie_next_panel_SOURCES = \
 	main.c \
 	panel-window.h \
-	panel-window.c
+	panel-window.c \
+	x11/panel-window-x11.h \
+	x11/panel-window-x11.c
 
 budgie_next_panel_CFLAGS = \
 	$(GTK_CFLAGS) \

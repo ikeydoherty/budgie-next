@@ -13,6 +13,7 @@ missing
 *.deps
 *.o
 stamp-*
+*.dirstamp
 
 # auto m4 cruft
 /m4/lt*.m4
