@@ -49,6 +49,11 @@ BudgieThemeManager *budgie_theme_manager_new()
  */
 static void budgie_theme_manager_dispose(GObject *obj)
 {
+        BudgieThemeManager *self = BUDGIE_THEME_MANAGER(obj);
+
+        /* Ensure we nuke the style provider */
+        budgie_theme_manager_set_theme_css(self, NULL);
+
         G_OBJECT_CLASS(budgie_theme_manager_parent_class)->dispose(obj);
 }
 
@@ -127,8 +132,7 @@ remove_provider:
                 gtk_style_context_remove_provider_for_screen(screen,
                                                              GTK_STYLE_PROVIDER(
                                                                  self->css_provider));
-                g_object_unref(self->css_provider);
-                self->css_provider = NULL;
+                g_clear_object(&self->css_provider);
         }
 
         /* No new theme has been set, just bail */
