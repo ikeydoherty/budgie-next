@@ -39,10 +39,7 @@ static void budgie_panel_window_dispose(GObject *obj)
 {
         BudgiePanelWindow *self = BUDGIE_PANEL_WINDOW(obj);
 
-        if (self->priv->theme_manager) {
-                g_object_unref(self->priv->theme_manager);
-                self->priv->theme_manager = NULL;
-        }
+        g_clear_object(&self->priv->theme_manager);
 
         G_OBJECT_CLASS(budgie_panel_window_parent_class)->dispose(obj);
 }
