@@ -88,6 +88,7 @@ static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint mon
         gint monitor_count = 0;
         gint screen_height = 0;
         gint ps = self->priv->size_extent;
+        gint scale_factor = 1;
 
         /* Ensure we have a window + realized state */
         window = gtk_widget_get_window(GTK_WIDGET(self));
@@ -97,6 +98,11 @@ static void budgie_panel_x11_window_set_struts(BudgiePanelWindow *self, gint mon
         if (!gtk_widget_get_realized(GTK_WIDGET(self))) {
                 return;
         }
+
+        scale_factor = gtk_widget_get_scale_factor(GTK_WIDGET(self));
+
+        /* Ensure's struts are in accordance with HiDPI */
+        ps *= scale_factor;
 
         screen = gtk_widget_get_screen(GTK_WIDGET(self));
         monitor_count = gdk_screen_get_n_monitors(screen);
