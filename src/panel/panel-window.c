@@ -82,6 +82,7 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
         /* Initialise private variables */
         self->priv->size_extent = 40;
         self->priv->monitor = -1;
+        self->priv->position = PANEL_POSITION_BOTTOM;
 
         /* EMWH requirements */
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
@@ -113,8 +114,6 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
 
         /* Eventually this will belong to a BudgiePanelManager */
         self->priv->theme_manager = budgie_theme_manager_new();
-
-        self->priv->position = PANEL_POSITION_BOTTOM;
 }
 
 void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, PanelPosition position)
