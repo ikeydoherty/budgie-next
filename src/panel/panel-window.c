@@ -60,6 +60,18 @@ static void budgie_panel_window_class_init(BudgiePanelWindowClass *klazz)
 }
 
 /**
+ * Scaling factor of the UI changed, so update struts accordingly.
+ */
+static void budgie_panel_scale_changed(BudgiePanelWindow *self, __solus_unused__ GParamSpec *spec,
+                                       __solus_unused__ gpointer udata)
+{
+        /* Reset our position now */
+        budgie_panel_window_set_position(self, -1, self->priv->position);
+        budgie_panel_window_set_struts(self, -1, self->priv->position);
+        gtk_widget_queue_resize(GTK_WIDGET(self));
+}
+
+/**
  * Instaniation
  */
 static void budgie_panel_window_init(BudgiePanelWindow *self)
@@ -77,6 +89,12 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(self), TRUE);
         gtk_window_set_type_hint(GTK_WINDOW(self), GDK_WINDOW_TYPE_HINT_DOCK);
         gtk_window_set_decorated(GTK_WINDOW(self), FALSE);
+
+        /* Ensure scale factor is accounted for. */
+        g_signal_connect(self,
+                         "notify::scale-factor",
+                         G_CALLBACK(budgie_panel_scale_changed),
+                         NULL);
 
         /* Set an RGBA visual */
         screen = gtk_widget_get_screen(GTK_WIDGET(self));
