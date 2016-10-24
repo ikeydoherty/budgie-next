@@ -22,6 +22,7 @@ struct _BudgiePanelWindowPrivate {
         gint size_extent;
         BudgieThemeManager *theme_manager;
         PanelPosition position;
+        gint monitor;
 };
 
 /*

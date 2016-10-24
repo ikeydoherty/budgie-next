@@ -64,8 +64,8 @@ static void budgie_panel_window_scale_changed(BudgiePanelWindow *self,
                                               __solus_unused__ gpointer udata)
 {
         /* Reset our position now */
-        budgie_panel_window_set_position(self, -1, self->priv->position);
-        budgie_panel_window_set_struts(self, -1, self->priv->position);
+        budgie_panel_window_set_position(self, self->priv->monitor, self->priv->position);
+        budgie_panel_window_set_struts(self, self->priv->monitor, self->priv->position);
         gtk_widget_queue_resize(GTK_WIDGET(self));
 }
 
@@ -81,6 +81,7 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
 
         /* Initialise private variables */
         self->priv->size_extent = 40;
+        self->priv->monitor = -1;
 
         /* EMWH requirements */
         gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
@@ -190,7 +191,7 @@ static void budgie_panel_window_constructed(GObject *object)
         BudgiePanelWindow *self = BUDGIE_PANEL_WINDOW(object);
 
         /* Again, testing. */
-        budgie_panel_window_set_position(self, -1, self->priv->position);
+        budgie_panel_window_set_position(self, self->priv->monitor, self->priv->position);
 
         G_OBJECT_CLASS(budgie_panel_window_parent_class)->constructed(object);
 }
@@ -201,7 +202,7 @@ static void budgie_panel_window_constructed(GObject *object)
 static gboolean budgie_panel_window_realized(BudgiePanelWindow *self,
                                              __solus_unused__ gpointer userdata)
 {
-        budgie_panel_window_set_struts(self, -1, self->priv->position);
+        budgie_panel_window_set_struts(self, self->priv->monitor, self->priv->position);
         return GDK_EVENT_PROPAGATE;
 }
 
