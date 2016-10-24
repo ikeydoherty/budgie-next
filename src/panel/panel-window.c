@@ -96,6 +96,8 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
 
         /* Eventually this will belong to a BudgiePanelManager */
         self->priv->theme_manager = budgie_theme_manager_new();
+
+        self->priv->position = PANEL_POSITION_BOTTOM;
 }
 
 void budgie_panel_window_set_position(BudgiePanelWindow *self, gint monitor, PanelPosition position)
@@ -172,7 +174,7 @@ static void budgie_panel_window_constructed(GObject *object)
         BudgiePanelWindow *self = BUDGIE_PANEL_WINDOW(object);
 
         /* Again, testing. */
-        budgie_panel_window_set_position(self, -1, PANEL_POSITION_BOTTOM);
+        budgie_panel_window_set_position(self, -1, self->priv->position);
 
         G_OBJECT_CLASS(budgie_panel_window_parent_class)->constructed(object);
 }
@@ -183,7 +185,7 @@ static void budgie_panel_window_constructed(GObject *object)
 static gboolean budgie_panel_window_realized(BudgiePanelWindow *self,
                                              __solus_unused__ gpointer userdata)
 {
-        budgie_panel_window_set_struts(self, -1, PANEL_POSITION_BOTTOM);
+        budgie_panel_window_set_struts(self, -1, self->priv->position);
         return GDK_EVENT_PROPAGATE;
 }
 

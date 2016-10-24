@@ -21,6 +21,7 @@ SOLUS_END_PEDANTIC
 struct _BudgiePanelWindowPrivate {
         gint size_extent;
         BudgieThemeManager *theme_manager;
+        PanelPosition position;
 };
 
 /*
