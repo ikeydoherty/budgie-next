@@ -62,8 +62,9 @@ static void budgie_panel_window_class_init(BudgiePanelWindowClass *klazz)
 /**
  * Scaling factor of the UI changed, so update struts accordingly.
  */
-static void budgie_panel_scale_changed(BudgiePanelWindow *self, __solus_unused__ GParamSpec *spec,
-                                       __solus_unused__ gpointer udata)
+static void budgie_panel_window_scale_changed(BudgiePanelWindow *self,
+                                              __solus_unused__ GParamSpec *spec,
+                                              __solus_unused__ gpointer udata)
 {
         /* Reset our position now */
         budgie_panel_window_set_position(self, -1, self->priv->position);
@@ -93,7 +94,7 @@ static void budgie_panel_window_init(BudgiePanelWindow *self)
         /* Ensure scale factor is accounted for. */
         g_signal_connect(self,
                          "notify::scale-factor",
-                         G_CALLBACK(budgie_panel_scale_changed),
+                         G_CALLBACK(budgie_panel_window_scale_changed),
                          NULL);
 
         /* Set an RGBA visual */
